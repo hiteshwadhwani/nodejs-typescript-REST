@@ -4,6 +4,9 @@ import {
     SignUpService, LoginService, LogoutService
 } from "../services"
 
+import {authenticateUser} from "../middelware/checkIsAuth"
+import {AuthRequest} from "../interfaces/requestInterface"
+
 
 export const signUpController = (req:Request, res:Response, next:NextFunction) => SignUpService(req, res, next)
 
