@@ -6,7 +6,11 @@ import envConfig from "../config/env.config"
 import {AuthRequest} from "../interfaces/requestInterface"
 
 export const authenticateUser = async (req:AuthRequest, res:Response, next:NextFunction) => {
-    const token = req.cookies.token;
+    const authHeader = (req && req.headers.authorization) || (req && req.headers.Authorization)
+    const token = (authHeader && String(authHeader).split(' ')[1]) || req.cookies.token || ''
+    req.token = token
+
+    console.log(token)
 
     //if token is not available
     if(!token){
@@ -16,10 +20,10 @@ export const authenticateUser = async (req:AuthRequest, res:Response, next:NextF
     try{
         await jwt.verify(token, envConfig.ACCESS_TOKEN_SECRET_KEY as jwt.Secret, async (err: Error | null, decodedUser: any) => {
             if(err){
-                return res.status(401).json({message:"Unauthorized"})
+                return res.status(401).json({message:"Unauthorized", description: err})
             }
             try{
-                const decodedUserinDB = prisma.user.findUnique({
+                const decodedUserinDB = await prisma.user.findFirst({
                     where:{
                         id: decodedUser.id as string
                     }

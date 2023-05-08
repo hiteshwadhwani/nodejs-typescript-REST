@@ -8,13 +8,15 @@ import {
   readItemsService
 } from "../services";
 
-export const createItemContoller = (req:Request, res:Response, next:NextFunction) => createItemService(req, res, next)
+import {AuthRequest} from "../interfaces/requestInterface"
 
-export const readItemsController = (req:Request, res:Response, next:NextFunction) => readItemsService(req, res, next)
+export const createItemContoller = (req:AuthRequest, res:Response, next:NextFunction) => createItemService(req, res, next)
 
-export const readItemController = (req:Request, res:Response, next:NextFunction) => readItemService(req, res, next)
+export const readItemsController = (req:AuthRequest, res:Response, next:NextFunction) => readItemsService(req, res, next)
 
-export const updateItemController = (req:Request, res:Response, next:NextFunction) => updateItemService(req, res, next)
+export const readItemController = (req:AuthRequest, res:Response, next:NextFunction) => readItemService(req, res, next)
 
-export const deleteItemController = (req:Request, res:Response, next:NextFunction) => deleteItemService(req, res, next)
+export const updateItemController = (req:AuthRequest, res:Response, next:NextFunction) => updateItemService(req, res, next)
+
+export const deleteItemController = (req:AuthRequest, res:Response, next:NextFunction) => deleteItemService(req, res, next)
 

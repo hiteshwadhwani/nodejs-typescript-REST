@@ -12,19 +12,22 @@ datasource db {
 
 model User {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  email          String  @unique
+  email          String   @unique
   name           String
   hashedPassword String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  items Items[]
 }
+
 model Items {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  userId     String? @db.ObjectId
+  User User? @relation(fields: [userId], references: [id])
 }
-
-

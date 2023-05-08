@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.use("/", indexRoutes)
 router.use("/user", userRoutes)
-router.use("/post", itemsRoutes)
+router.use("/item", itemsRoutes)
 
 export default router
 
