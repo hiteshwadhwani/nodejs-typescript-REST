@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import api from "./api/index";
 
 // Import middelwares
+import {logRequestData} from "./middelware/logger"
 
 // access environment variables
 dotenv.config();
@@ -26,6 +27,8 @@ app.use(cors());
 
 // Serve all static files inside public directory
 app.use("/static", express.static("public"));
+
+app.use(logRequestData)
 
 //Routes handeling the request
 app.use("/", api);
