@@ -53,7 +53,7 @@ export const LoginService = async (
     if (isMatch) {
       const token = generateToken(user);
       res.cookie("token", token, { httpOnly: true, secure: true });
-      res.json({ token, message: "Logged In" });
+      res.status(200).json({ token, message: "Logged In" });
     } else {
       res.status(401).json({ message: "Invalid credentials" });
     }

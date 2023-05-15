@@ -1,9 +1,11 @@
 // Import all the dependecies
-import express, { Request, Response, NextFunction } from "express";
+import express, {Express, Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import YAML from "yamljs";
+import SwaggerUI from "swagger-ui-express";
 
 //Import Routes
 import api from "./api/index";
@@ -11,13 +13,17 @@ import api from "./api/index";
 // Import middelwares
 import {logRequestData} from "./middelware/logger"
 
+const swaggerDocument = YAML.load(`${process.cwd()}/swagger/swagger.yaml`);
+
 // access environment variables
 dotenv.config();
 
 //initialize app with express
-const app: express.Application | undefined = express();
+const app: Express | undefined = express();
 
 //Load app middelware
+app.use('/api-docs', SwaggerUI.serve, SwaggerUI.setup(swaggerDocument));
+
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -44,7 +44,7 @@ export const readItemService = async (
     const id = req.params.id;
     const item = await prisma.items.findUnique({
       where: {
-        id: id,
+        id: id as string,
       },
     });
     if (!item) {
@@ -60,7 +60,7 @@ export const readItemService = async (
   } catch (error) {
     res.status(500).json({
       success: false,
-      description: "Internal server error",
+      description: error,
     });
   }
 };

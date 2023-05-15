@@ -1,0 +1,392 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server.  You can find out more about    \ Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).    \  For this sample, you can use the api key `special-key` to test the authorization    \ filters."
+  version: "1.0.0"
+  title: "Swagger Petstore 2.0"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "hiteshwadhwani1403@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: https://example.com/api/v1
+    description: Hosted API server
+  - url: http://localhost:8000
+    description: Local development server
+# host: "localhost:8000"
+# basePath: ""
+# schemes:
+# - "http"
+paths:
+  /test:
+    get:
+      tags:
+      - healtcheck
+      description: Responds if the app is running
+      responses:
+        200:
+          description: app is up and running
+  /user/signup:
+    post:
+      tags:
+      - user
+      description: user signup
+      parameters:
+        - name: user
+          in: body
+          required: true
+          schema:
+            $ref: '#components/schemas/CreateUserInput'
+      responses:
+        201:
+          description: success
+          schema:
+            $ref: '#components/schemas/User'
+  /user/login:
+    post:
+      tags:
+      - user
+      description: user login
+      parameters:
+        - name: user
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        201:
+          description: success
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+              message:
+                type: string
+        401:
+          description: Invalid credentials
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: server errror
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+  /user/logout:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+      - user
+      description: user logout
+      responses:
+        200:
+          description: success
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              message:
+                type: string
+        401:
+          description: failed
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+  /item:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - item
+      description: get item
+      responses:
+        201:
+          description: success
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              allItems:
+                type: object
+                $ref : '#components/schemas/Item'
+        400:
+          description: failed
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              message:
+                type: string
+        401:
+          description: failed
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+      - item
+      description: create new item
+      parameters:
+        - name: item
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+      responses:
+        200:
+          description: success
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              item:
+                type: object
+                $ref : '#components/schemas/Item'
+        401:
+          description: failed
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+  /item/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - item
+      description: get item at ID specified in path
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+      responses:
+        200:
+          description: success
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              item:
+                type: object
+                $ref : '#components/schemas/Item'
+        400:
+          description: failed
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              description:
+                type: string
+        401:
+          description: failed
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: failed
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              description:
+                type: string
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+      - item
+      description: update item of ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: item
+          in: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+      responses:
+        200:
+          description: success
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              newItem:
+                type: object
+                $ref : '#components/schemas/Item'
+        400:
+          description: failed
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              description:
+                type: string
+        401:
+          description: failed
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: failed
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              description:
+                type: string
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+      - item
+      description: Delete item 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          pattern: '^[0-9a-fA-F]{24}$'
+      responses:
+        200:
+          description: success
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              desription:
+                type: string
+              deleteItem:
+                type: object
+                $ref : '#components/schemas/Item'
+        401:
+          description: failed
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: failed
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              description:
+                type: string
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    CreateUserInput:
+      type: object
+      required:
+        - email
+        - name
+        - password
+      properties:
+        email:
+          type: string
+          example: hiteshwadhwani1403@gmail.com
+        name:
+          type: string
+          example: hitesh wadhwani
+        password:
+          type: string
+          example: password123
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        hashedPassword:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        items:
+          type: array
+          $ref: '#components/schemas/Item'
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        userId:
+          type: object
+          $ref: '#components/schemas/User'
+    AuthResponse:
+      type: object
+      properties:
+        message:
+          type: string
+security:
+  - bearerAuth: []
+    
+
