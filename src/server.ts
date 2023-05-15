@@ -4,8 +4,8 @@ import environmentConfig  from './config/env.config'
 
 const start =  async () => {
   try{
-    app?.listen(environmentConfig.PORT, () => {
-      console.log(`Listening: http://localhost:${environmentConfig.PORT}`)
+    app?.listen(process.env.PORT || 8000, () => {
+      console.log(`Listening: http://localhost:${process.env.PORT || 8000}`)
     })
   }
   catch(error){
